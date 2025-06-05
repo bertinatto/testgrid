@@ -246,6 +246,14 @@ var Variants = map[string]internal.Variant{
 		UpgradeFromCurrent:  false,
 		Serial:              false,
 	},
+	"periodic-ci-openshift-release-master-ci-4.20-upgrade-from-stable-4.19-e2e-azure-ovn-upgrade": {
+		Name:                "aggregated-azure-ovn-upgrade-4.20-minor",
+		Parallel:            true,
+		CSI:                 false,
+		UpgradeFromPrevious: true,
+		UpgradeFromCurrent:  false,
+		Serial:              false,
+	},
 	"periodic-ci-openshift-release-master-ci-4.20-upgrade-from-stable-4.19-e2e-gcp-ovn-rt-upgrade": {
 		Name:                "aggregated-gcp-ovn-rt-upgrade-4.20-minor",
 		Parallel:            true,

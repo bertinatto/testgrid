@@ -87,3 +87,4 @@ periodic-ci-openshift-cluster-control-plane-machine-set-operator-release-4.20-pe
 periodic-ci-openshift-release-master-nightly-4.20-e2e-aws-ovn-single-node	aws-ovn-single-node	single-node,parallel
 periodic-ci-openshift-release-master-ci-4.20-e2e-azure-ovn	azure-ovn	ha,parallel
 periodic-ci-openshift-hypershift-release-4.20-periodics-e2e-aks	hypershift-aks	ha,parallel
+periodic-ci-openshift-release-master-ci-4.20-upgrade-from-stable-4.19-e2e-azure-ovn-upgrade	aggregated-azure-ovn-upgrade-4.20-minor	upgrade-minor,ha,parallel
