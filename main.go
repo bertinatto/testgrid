@@ -8,6 +8,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"time"
 
 	"github.com/bertinatto/testgrid/internal/crawler"
 	"github.com/bertinatto/testgrid/internal/report"
@@ -18,6 +19,7 @@ func main() {
 	ocpVersionFlag := flag.String("ocp-version", "", "ocp version to match jobs against (example: 4.15)")
 	outputFlag := flag.String("output", "report.html", "specify the output file for the report (default: report.html)")
 	cacheDirFlag := flag.String("cache-dir", "", "specify the directory where scraped data should be cached (default: no cache)")
+	daysFlag := flag.Int("days", 1, "specify the amount of days (default: 1)")
 	flag.Parse()
 
 	if *ocpVersionFlag == "" {
@@ -59,7 +61,9 @@ func main() {
 	curVer := fmt.Sprintf("%.2f", v)
 	prevVer := fmt.Sprintf("%.2f", v-0.01)
 
-	jobs := crawler.New(org, repo, prID, curVer, *cacheDirFlag).Do()
+	// Extract since
+	since := time.Now().AddDate(0, 0, -*daysFlag)
+	jobs := crawler.New(org, repo, prID, curVer, since, *cacheDirFlag).Do()
 	report := report.New(curVer, prevVer, org, repo, prID)
 	err = report.Create(jobs)
 	if err != nil {

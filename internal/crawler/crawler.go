@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bertinatto/testgrid/internal"
 	"github.com/gocolly/colly"
@@ -24,9 +25,10 @@ type Crawler struct {
 	cacheDir      string
 	collector     *colly.Collector
 	ocpVersion    string
+	since         time.Time
 }
 
-func New(org, repo string, prID int, ocpVersion string, cacheDir string) *Crawler {
+func New(org, repo string, prID int, ocpVersion string, since time.Time, cacheDir string) *Crawler {
 	allowedDomains := []string{
 		"github.com",
 		"api.github.com",
@@ -41,6 +43,7 @@ func New(org, repo string, prID int, ocpVersion string, cacheDir string) *Crawle
 		data:          make(map[string][]*internal.ProwJob, 128),
 		cacheDir:      cacheDir,
 		collector:     newCollector(cacheDir, allowedDomains...),
+		since:         since,
 	}
 }
 
@@ -86,7 +89,7 @@ func (c *Crawler) parsePR() []string {
 
 	// Finally, visit the PR page (through the API).
 	// TODO: add pagination, otherwise it won't be possible to scrape more than 100 jobs.
-	collector.Visit(fmt.Sprintf("https://api.github.com/repos/%s/%s/issues/%d/comments?per_page=100", c.org, c.repo, c.pullRequestID))
+	collector.Visit(fmt.Sprintf("https://api.github.com/repos/%s/%s/issues/%d/comments?per_page=100&since=%s", c.org, c.repo, c.pullRequestID, c.since.Format(time.RFC3339)))
 
 	return payloadJobs.List()
 }
